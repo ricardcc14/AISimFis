@@ -6,7 +6,7 @@ class Ball:
     def __init__(self, world:b2.b2World, x:float, y:float, radius:float):
         self.radius = radius
         self.isRemoved = False
-        
+        self.touched_floor = False
         bodydf = b2.b2BodyDef()
         bodydf.position = utils.pixelToWorld(x, y)
         bodydf.type = b2.b2_dynamicBody
@@ -21,6 +21,13 @@ class Ball:
         fd.friction = 1
         self.body.CreateFixture(fd)
         pass
+           
+
+    def touchedFloor(self):
+        self.touched_floor = True
+        
+    def hasTouchedFloor(self):
+        return self.touched_floor
 
     def draw(self, screen:pygame.Surface):
         position:b2.b2Vec2 = utils.worldToPixel(self.body.position.copy())
@@ -30,6 +37,7 @@ class Ball:
         pass
 
     def update(self, world):
+        print("Ball update pos: ", self.body.position)
         pass
 
     def destroy(self, world:b2.b2World):

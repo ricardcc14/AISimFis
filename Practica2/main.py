@@ -15,12 +15,12 @@ frames = 60
 running = True
 
 #Controllers
-evolutionManager = EvolutionManager(screen, 'data.json')
-evolutionManager.loadElements()
+evolutionManager = EvolutionManager(screen)
+evolutionManager.run()
 
 while running:
     screen.fill('gray')
-    evolutionManager.draw()
+    
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
