@@ -9,9 +9,7 @@ class ContactListener(b2.b2ContactListener):
     def __init__(self):
         super().__init__()
 
-    def BeginContact(self, contact:b2.b2Contact):
-        print("Contact started")
-        
+    def BeginContact(self, contact:b2.b2Contact):        
         fixture1:b2.b2Fixture = contact.fixtureA
         fixture2:b2.b2Fixture = contact.fixtureB
 
@@ -20,13 +18,11 @@ class ContactListener(b2.b2ContactListener):
         
         o1 = body1.userData
         o2 = body2.userData
-        print(f"Contacte entre: {type(o1)} i {type(o2)}")
+
         if isinstance(o1, Ball) and isinstance(o2, Floor):
             o1.touchedFloor()
-            print("ORIOL")
         elif isinstance(o1, Floor) and isinstance(o2, Ball):
             o2.touchedFloor()
-            print("ROMEU")
         
     def EndContact(self, contact:b2.b2Contact):
         pass

@@ -26,6 +26,7 @@ class Individual:
         self.balls = self.loadBalls()
        
         self.floor = Floor(self.world, 0, 0, 640, 100)
+
     def draw(self, screen:pygame.Surface):
         for rectangle in self.adn:
             rectangle.draw(screen)
@@ -36,7 +37,10 @@ class Individual:
     def create_adn(self):
         initial = []
         for i in range(self.nRectangles):
-            initial.append(Rectangle(self.world, 20 * i, 100, np.random.uniform(-np.pi, np.pi)))
+            if i == 0:
+                initial.append(Rectangle(self.world, 20, 100, np.random.uniform(-np.pi, np.pi)))
+            else:
+                initial.append(Rectangle(self.world, 20 + (30 * i), 100, np.random.uniform(-np.pi, np.pi)))
         return initial
     
     def loadBalls(self):
@@ -51,8 +55,8 @@ class Individual:
             balls.append(new_ball)
 
         return balls
+    
     def simulate(self):
-
         for _ in range(self.steps):
             self.world.Step(self.time_step, self.vel_iters, self.pos_iters)
 
@@ -65,8 +69,9 @@ class Individual:
                 self.fitness += 1
 
         return self.fitness
-    def getAdn(self, index):
-        return self.adn[index]
+    
+    def getAngleFromGene(self, index):
+        return self.adn[index].angle
     
     def mutateAngle(self, index):
         self.adn[index].mutateAngle()
@@ -75,9 +80,17 @@ class Individual:
         for ball in self.balls:
             ball.destroy(self.world)
         self.balls.clear()
+
         if self.body:
             self.world.DestroyBody(self.body)
             self.body = None
-        self.fitness = 0.0
+            
         for i in range(len(self.adn)):
             self.adn[i].destroy(self.world)
+
+        if self.floor and self.floor.body:
+            self.world.DestroyBody(self.floor.body)
+            self.floor.body = None
+
+        self.adn.clear()
+        self.fitness = 0.0
