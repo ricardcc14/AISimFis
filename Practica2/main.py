@@ -33,12 +33,12 @@ while running:
 
     if (evolutionManager.resultFound() == False):
         evolutionManager.update()
-        evolutionManager.drawInitialScenario()
+        
         font.render_to(screen, (10, 10), "Running " + algorithm + " algorithm...")
 
     else:
-        print("Hi!")
-        #evolutionManager.drawSolution()
+        font.render_to(screen, (10, 10), "Solution found!")
+        evolutionManager.drawSolution()
 
     pygame.display.flip()
     clock.tick(frames)

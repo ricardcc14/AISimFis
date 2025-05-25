@@ -44,10 +44,11 @@ class EvolutionManager:
             individual = Individual(self.createWorld())
             population.append(individual)
         return population
+    
     def fitness(self):
         fitness_values = []
         for individual in self.population:
-            fitness = individual.simulate()
+            fitness = individual.simulate(self.screen)
             fitness_values.append(fitness)
         return fitness_values
             
@@ -78,6 +79,7 @@ class EvolutionManager:
             return
 
         fitness_values = self.fitness()
+        self.population[0].draw(self.screen)
 
         print(f"Generation {self.generation}")
         print(f"Fitness values: {fitness_values}")

@@ -2,6 +2,7 @@ import Box2D as b2
 import pygame
 from Floor import Floor
 from Ball import Ball
+from Rectangle import Rectangle
 import utils
 
 class ContactListener(b2.b2ContactListener):
@@ -9,7 +10,8 @@ class ContactListener(b2.b2ContactListener):
     def __init__(self):
         super().__init__()
 
-    def BeginContact(self, contact:b2.b2Contact):        
+    def BeginContact(self, contact:b2.b2Contact): 
+
         fixture1:b2.b2Fixture = contact.fixtureA
         fixture2:b2.b2Fixture = contact.fixtureB
 
@@ -23,6 +25,7 @@ class ContactListener(b2.b2ContactListener):
             o1.touchedFloor()
         elif isinstance(o1, Floor) and isinstance(o2, Ball):
             o2.touchedFloor()
+
         
     def EndContact(self, contact:b2.b2Contact):
         pass

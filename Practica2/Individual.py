@@ -19,8 +19,8 @@ class Individual:
         self.pos_iters = 3
         self.steps = 300
         self.body = None
-        self.fitness = 1000
         self.nRectangles = 20
+        self.fitness = 0
         self.adn = self.create_adn()
         self.balls = []
         self.balls = self.loadBalls()
@@ -56,7 +56,7 @@ class Individual:
 
         return balls
     
-    def simulate(self):
+    def simulate(self, screen):
         for _ in range(self.steps):
             self.world.Step(self.time_step, self.vel_iters, self.pos_iters)
 
