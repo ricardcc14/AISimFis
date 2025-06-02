@@ -65,6 +65,12 @@ class Rectangle:
     #def update(self, world):
     def mutateAngle(self):
         self.angle = np.random.uniform(-np.pi, np.pi)
+    def mutateYPos(self):
+        self.y = np.random.randint(100, 250)
+        self.body.position.y = utils.pixelToWorld(self.y)
+    def mutateXPos(self):
+        self.x = np.random.randint(30, 610)
+        self.body.position.x = utils.pixelToWorld(self.x)
 
     def destroy(self, world:b2.b2World):
         if self.body:

@@ -63,13 +63,19 @@ class EvolutionManager:
         for i in range(len(parent1.adn)):
             if np.random.rand() < self.crossover_rate:
                 child.adn[i].angle = parent1.getAngleFromGene(i)
+                child.adn[i].y = parent1.getYPosFromGene(i)
+                child.adn[i].x = parent1.getXPosFromGene(i)
             else:
                 child.adn[i].angle = parent2.getAngleFromGene(i)
+                child.adn[i].y = parent2.getYPosFromGene(i)
+                child.adn[i].x = parent2.getXPosFromGene(i)
         return child
     def mutate(self, child):
         for i in range(len(child.adn)):
             if np.random.rand() < self.mutation_rate:
                 child.mutateAngle(i)
+                child.mutateYPos(i)
+                child.mutateXPos(i)
         return child
     
 
@@ -123,7 +129,6 @@ class EvolutionManager:
     def drawSolution(self):
 
         index = self.optimalResultIndex
-
         if (index != None):
             self.population[index].draw(self.screen)
 

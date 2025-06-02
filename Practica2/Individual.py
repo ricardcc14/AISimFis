@@ -38,9 +38,10 @@ class Individual:
         initial = []
         for i in range(self.nRectangles):
             if i == 0:
-                initial.append(Rectangle(self.world, 20, 100, np.random.uniform(-np.pi, np.pi)))
+                initial.append(Rectangle(self.world, 20, np.random.randint(100,250), np.random.uniform(-np.pi, np.pi)))
             else:
-                initial.append(Rectangle(self.world, 20 + (30 * i), 100, np.random.uniform(-np.pi, np.pi)))
+                #initial.append(Rectangle(self.world, 20 + (30 * i), np.random.randint(100,250), np.random.uniform(-np.pi, np.pi)))
+                initial.append(Rectangle(self.world, np.random.randint(30, 610), np.random.randint(100,250), np.random.uniform(-np.pi, np.pi)))
         return initial
     
     def loadBalls(self):
@@ -72,10 +73,18 @@ class Individual:
     
     def getAngleFromGene(self, index):
         return self.adn[index].angle
+    def getYPosFromGene(self, index):
+        return self.adn[index].y
+    def getXPosFromGene(self, index):
+        return self.adn[index].x
+    
     
     def mutateAngle(self, index):
         self.adn[index].mutateAngle()
-
+    def mutateYPos(self, index):
+        self.adn[index].mutateYPos()
+    def mutateXPos(self, index):
+        self.adn[index].mutateXPos()
     def destroy(self):
         for ball in self.balls:
             ball.destroy(self.world)
