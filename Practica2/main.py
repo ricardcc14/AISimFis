@@ -13,19 +13,33 @@ screen = pygame.display.set_mode((640, 400))
 clock = pygame.time.Clock()
 frames = 60
 running = True
+font = pygame.freetype.SysFont("Consolas", 24, "white")
+
+algorithm = "genetic"
+
+algorithmStarted = False
+resultFound = False
 
 #Controllers
-evolutionManager = EvolutionManager(screen, 'data.json')
-evolutionManager.loadElements()
+evolutionManager = EvolutionManager(screen)
+optimalResultIndex = None
 
 while running:
     screen.fill('gray')
-    evolutionManager.draw()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    
+
+    if (evolutionManager.resultFound() == False):
+        evolutionManager.update()
+        
+        font.render_to(screen, (10, 10), "Running " + algorithm + " algorithm...")
+
+    else:
+        font.render_to(screen, (10, 10), "Solution found!")
+        evolutionManager.drawSolution()
+
     pygame.display.flip()
     clock.tick(frames)
 
