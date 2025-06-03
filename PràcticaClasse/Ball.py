@@ -1,7 +1,7 @@
 import pygame
 import Box2D as b2
 import numpy as np
-from utils import pixelToWorld, worldToPixel
+from utils import pixelToWorld, worldToPixel, drawRotatedImage
 
 class Ball:
     def __init__(self, world, x, y, radius):
@@ -21,14 +21,20 @@ class Ball:
         fd.friction = 1
         fd.restitution = 0.1
         self.body.CreateFixture(fd)
+        self.sprite = pygame.image.load("doodle.png")
         pass
 
     def draw(self, screen):
-        pos = worldToPixel(self.body.position)
+        position:b2.b2Vec2 = worldToPixel(self.body.position.copy())
+        position.y = screen.get_height()-position.y
+
         r = worldToPixel(self.radius)
-        pygame.draw.circle(screen, "white", (pos.x, screen.get_height()-pos.y), r)
-        pygame.draw.circle(screen, "black", (pos.x, screen.get_height()-pos.y), r, 1)
+
+        drawRotatedImage(screen, pygame.transform.scale(self.sprite, (r*2, r*2)), position, r*2, r*2, self.body.angle)
         pass
+
+
+       
 
     def destroyBody(self, world):
         world.DestroyBody(self.body)
