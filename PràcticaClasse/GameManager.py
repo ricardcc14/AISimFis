@@ -47,8 +47,8 @@ class GameManager:
         self.surface.draw(self.screen)
         self.drawPlatformsInScreen()
 
-    def makeBallJump(self):
-        self.ball.jump(self.screen, pygame.mouse.get_pos(), 1.5)
+    def makeBallJump(self, direction):
+        self.ball.jump(self.screen, direction, 1.5)
 
     def updatePlatforms(self):
         for platform in self.platforms:

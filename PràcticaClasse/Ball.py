@@ -40,10 +40,10 @@ class Ball:
         world.DestroyBody(self.body)
         pass
 
-    def jump(self, screen:pygame.Surface, pointer, mult):
-        pointer = np.array([pointer[0], screen.get_height() - pointer[1]])
+    def jump(self, screen:pygame.Surface, direction, mult):
+        #pointer = np.array([pointer[0], screen.get_height() - pointer[1]])
 
-        direction = pointer - np.array(worldToPixel(self.body.position))
+        #direction = pointer - np.array(worldToPixel(self.body.position))
         direction = direction/np.linalg.norm(direction)
 
         self.body.ApplyLinearImpulse(direction*mult, self.body.position, True)

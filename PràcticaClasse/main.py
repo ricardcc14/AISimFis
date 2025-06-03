@@ -3,6 +3,8 @@ import Box2D as b2
 from Ball import Ball
 from Surface import Surface
 from GameManager import GameManager
+import numpy as np
+
 
 # pygame setup
 pygame.init()
@@ -23,9 +25,11 @@ while running:
         #if event.type == pygame.MOUSEBUTTONDOWN:
         
     gameManager.renderGame()
+    direction = np.array([1, 1])
+
     currentTime = pygame.time.get_ticks()
     if currentTime - timeLastJump >= 3000:
-        gameManager.makeBallJump()
+        gameManager.makeBallJump(direction)
         timeLastJump = pygame.time.get_ticks()
 
 

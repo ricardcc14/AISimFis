@@ -35,5 +35,5 @@ class Surface:
     def update(self):
         print("Current pos: " , self.body.linearVelocity)
         if self.body.position.y < 0:
-            self.body.position.y = self.initialY
-            self.body.position.x = self.initialX
+            self.body.position.y += 6
+            
