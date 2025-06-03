@@ -2,6 +2,7 @@ import pygame
 import Box2D as b2
 from Ball import Ball
 from Surface import Surface
+from GameManager import GameManager
 
 # pygame setup
 pygame.init()
@@ -10,14 +11,7 @@ clock = pygame.time.Clock()
 frames = 60
 running = True
 
-# Box2D
-world = b2.b2World()
-time_step = 1/frames
-vel_iters, pos_iters = 8, 3
-
-# Data
-ball = Ball(world, screen.get_width()/2, screen.get_height()/2+100, 25)
-surface = Surface(world, screen.get_width()/2, 0, screen.get_width(), 20)
+gameManager = GameManager(frames, screen)
 
 while running:
     # poll for events
@@ -26,16 +20,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            ball.jump(screen, pygame.mouse.get_pos(), 1.5)
+            gameManager.makeBallJump()
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("gray")
 
-    # RENDER YOUR GAME HERE
-    world.Step(time_step, vel_iters, pos_iters)
+    gameManager.renderGame()
 
-    ball.draw(screen)
-    surface.draw(screen)
 
     # flip() the display to put your work on screen
     pygame.display.flip()
