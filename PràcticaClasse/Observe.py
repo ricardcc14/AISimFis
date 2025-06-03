@@ -1,19 +1,17 @@
 import numpy as np
 
+
 def observe(ball, platforms, screen_height):
     i1 = ball.body.position.y
     i2 = ball.body.linearVelocity.y
 
-    closest_platform = None
-    min_dy = float('inf')
-    for p in platforms:
-        dy = p.body.position.y - i1
-        if dy > 0 and dy < min_dy:
-            min_dy = dy
-            closest_platform = p
+    # Filtra només les plataformes sota la pilota
+    below_platforms = [p for p in platforms if p.body.position.y > i1]
 
-    if closest_platform:
-        i3 = min_dy
+    if below_platforms:
+        # Troba la plataforma més propera sota la pilota
+        closest_platform = min(below_platforms, key=lambda p: p.body.position.y - i1)
+        i3 = closest_platform.body.position.y - i1
         i4 = closest_platform.body.position.x - ball.body.position.x
     else:
         i3 = screen_height / 30
