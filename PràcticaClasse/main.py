@@ -12,18 +12,21 @@ frames = 60
 running = True
 
 gameManager = GameManager(frames, screen)
-
+timeLastJump = 0
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            gameManager.makeBallJump()
-
-
+        #if event.type == pygame.MOUSEBUTTONDOWN:
+        
     gameManager.renderGame()
+    currentTime = pygame.time.get_ticks()
+    if currentTime - timeLastJump >= 3000:
+        gameManager.makeBallJump()
+        timeLastJump = pygame.time.get_ticks()
+
 
 
     # flip() the display to put your work on screen

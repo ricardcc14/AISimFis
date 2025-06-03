@@ -18,6 +18,7 @@ class Surface:
         fd.density = 1
         fd.friction = 0.1
         self.body.CreateFixture(fd)
+        self.body.linearVelocity = b2.b2Vec2(0, -0.6)
         pass
 
     def draw(self, screen):
@@ -26,3 +27,4 @@ class Surface:
         h = worldToPixel(self.h)
         pygame.draw.rect(screen, "black", (pos.x-w/2, screen.get_height()-pos.y-h/2, w, h))
         pass
+
