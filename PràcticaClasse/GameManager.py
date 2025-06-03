@@ -3,6 +3,8 @@ from Surface import Surface
 import Box2D as b2
 import pygame
 from utils import pixelToWorld, worldToPixel
+from Model import Model
+from Observe import observe
 
 
 class GameManager:
@@ -12,11 +14,13 @@ class GameManager:
         self.world = b2.b2World()
         self.time_step = 1/frames
         self.vel_iters, self.pos_iters = 8, 3
-
-        self.ball = Ball(self.world, self.screen.get_width()/2, self.screen.get_height()/2+100, 25)
-        self.surface = Surface(self.world, self.screen.get_width()/2, 0, self.screen.get_width(), 20)
+        self.Model = Model()
 
         self.platforms = self.createPlatforms()
+        spawnDoodle = self.platforms[0].getDoodleSpawnPoint()
+
+        self.ball = Ball(self.world, spawnDoodle.x, spawnDoodle.y + 15, 25)
+        #self.surface = Surface(self.world, self.screen.get_width()/2, 0, self.screen.get_width(), 20)
 
     def createPlatforms(self):
         platforms = []
@@ -41,13 +45,9 @@ class GameManager:
 
     def renderGame(self):
         self.screen.fill("gray")
-
         self.world.Step(self.time_step, self.vel_iters, self.pos_iters)
-
         self.updatePlatforms()
-
         self.ball.draw(self.screen)
-        self.surface.draw(self.screen)
         self.drawPlatformsInScreen()
 
     def makeBallJump(self, direction):
@@ -75,6 +75,31 @@ class GameManager:
     def drawPlatformsInScreen(self):
         for platform in self.platforms:
             platform.draw(self.screen)
+
+
+    def geneticSimulation(self, iterations=300):
+        for i in range(iterations):
+
+            #Quan ha passat 3 segons, que faci observació
+            if i % 3*60 == 0:
+                observation = observe(self.ball, self.platforms, self.screen.get_height())
+                #observation = torch.tensor(observation, dtype=torch.float32).unsqueeze(0).to(device)
+                
+                #Definir direcció depenent de la observació
+
+                #with torch.no_grad():
+                    #direction = model(observation).cpu().numpy()
+
+                    #self.ball.jump(screen, direction)
+
+
+            self.world.Step(self.time_step, self.vel_iters, self.pos_iters)
+
+
+
+
+
+
 
 
 

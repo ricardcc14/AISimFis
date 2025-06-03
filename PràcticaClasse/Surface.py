@@ -35,3 +35,8 @@ class Surface:
 
     def respawn(self, new_y):
         self.body.position = (self.body.position.x, new_y)
+
+    
+    def getDoodleSpawnPoint(self):
+        position = self.body.position
+        return worldToPixel(position)
