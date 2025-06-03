@@ -15,10 +15,10 @@ class GameManager:
         self.ball = Ball(self.world, self.screen.get_width()/2, self.screen.get_height()/2+100, 25)
         self.surface = Surface(self.world, self.screen.get_width()/2, 0, self.screen.get_width(), 20)
 
-        self.platmorms = []
+        self.platforms = self.createPlatforms()
 
-    def createWorld(self):
-        self.platforms = []
+    def createPlatforms(self):
+        platforms = []
         screen_w = self.screen.get_width()
         screen_h = self.screen.get_height()
 
@@ -35,17 +35,29 @@ class GameManager:
             # Separació vertical per 1/2 alçada, començant a dalt
             y = i * vertical_spacing
 
-            platform = Surface(self.world, x, y, 200, 20)
-            self.platforms.append(platform)
+            platform = Surface(self.world, x, y + 30, 200, 20)
+            platforms.append(platform)
+        return platforms
 
     def renderGame(self):
         self.screen.fill("gray")
         self.world.Step(self.time_step, self.vel_iters, self.pos_iters)
+        self.updatePlatforms()
         self.ball.draw(self.screen)
         self.surface.draw(self.screen)
+        self.drawPlatformsInScreen()
 
     def makeBallJump(self):
         self.ball.jump(self.screen, pygame.mouse.get_pos(), 1.5)
+
+    def updatePlatforms(self):
+        for platform in self.platforms:
+            platform.update()
+            
+
+    def drawPlatformsInScreen(self):
+        for platform in self.platforms:
+            platform.draw(self.screen)
 
 
 

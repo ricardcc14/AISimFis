@@ -7,9 +7,12 @@ class Surface:
         self.w = pixelToWorld(w)
         self.h = pixelToWorld(h)
 
+        self.initialX = pixelToWorld(x)
+        self.initialY = pixelToWorld(y)
+
         bodydf = b2.b2BodyDef()
         bodydf.position = (pixelToWorld(x), pixelToWorld(y))
-        bodydf.type = b2.b2_staticBody
+        bodydf.type = b2.b2_kinematicBody
         self.body:b2.b2Body = world.CreateBody(bodydf)
 
         boxshape = b2.b2PolygonShape(box=(self.w/2, self.h/2))
@@ -18,6 +21,7 @@ class Surface:
         fd.density = 1
         fd.friction = 0.1
         self.body.CreateFixture(fd)
+        
         self.body.linearVelocity = b2.b2Vec2(0, -0.6)
         pass
 
@@ -28,3 +32,8 @@ class Surface:
         pygame.draw.rect(screen, "black", (pos.x-w/2, screen.get_height()-pos.y-h/2, w, h))
         pass
 
+    def update(self):
+        print("Current pos: " , self.body.linearVelocity)
+        if self.body.position.y < 0:
+            self.body.position.y = self.initialY
+            self.body.position.x = self.initialX

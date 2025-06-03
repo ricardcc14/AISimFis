@@ -13,6 +13,7 @@ running = True
 
 gameManager = GameManager(frames, screen)
 timeLastJump = 0
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
