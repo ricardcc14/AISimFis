@@ -21,7 +21,6 @@ class GameManager:
         self.ball.draw(self.screen)
         self.surface.draw(self.screen)
 
-
     def makeBallJump(self):
         self.ball.jump(self.screen, pygame.mouse.get_pos(), 1.5)
 
