@@ -6,6 +6,7 @@ class Surface:
     def __init__(self, world, x, y, w, h):
         self.w = pixelToWorld(w)
         self.h = pixelToWorld(h)
+        self.respawnIteration = 1
 
         self.initialX = pixelToWorld(x)
         self.initialY = pixelToWorld(y)
@@ -32,8 +33,5 @@ class Surface:
         pygame.draw.rect(screen, "black", (pos.x-w/2, screen.get_height()-pos.y-h/2, w, h))
         pass
 
-    def update(self):
-        print("Current pos: " , self.body.linearVelocity)
-        if self.body.position.y < 0:
-            self.body.position.y = self.initialY
-            self.body.position.x = self.initialX
+    def respawn(self, new_y):
+        self.body.position = (self.body.position.x, new_y)

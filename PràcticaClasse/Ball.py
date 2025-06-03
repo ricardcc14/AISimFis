@@ -34,8 +34,6 @@ class Ball:
         pass
 
 
-       
-
     def destroyBody(self, world):
         world.DestroyBody(self.body)
         pass

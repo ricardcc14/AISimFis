@@ -28,8 +28,6 @@ while running:
         gameManager.makeBallJump()
         timeLastJump = pygame.time.get_ticks()
 
-
-
     # flip() the display to put your work on screen
     pygame.display.flip()
 

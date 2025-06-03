@@ -2,6 +2,7 @@ from Ball import Ball
 from Surface import Surface
 import Box2D as b2
 import pygame
+from utils import pixelToWorld, worldToPixel
 
 
 class GameManager:
@@ -32,7 +33,6 @@ class GameManager:
             else:
                 x = screen_w * 0.75
 
-            # Separació vertical per 1/2 alçada, començant a dalt
             y = i * vertical_spacing
 
             platform = Surface(self.world, x, y + 30, 200, 20)
@@ -41,8 +41,11 @@ class GameManager:
 
     def renderGame(self):
         self.screen.fill("gray")
+
         self.world.Step(self.time_step, self.vel_iters, self.pos_iters)
+
         self.updatePlatforms()
+
         self.ball.draw(self.screen)
         self.surface.draw(self.screen)
         self.drawPlatformsInScreen()
@@ -51,9 +54,23 @@ class GameManager:
         self.ball.jump(self.screen, pygame.mouse.get_pos(), 1.5)
 
     def updatePlatforms(self):
+        
         for platform in self.platforms:
-            platform.update()
-            
+            print("Platform Y:", platform.body.position.y)
+
+            if platform.body.position.y < 0:
+                platform.respawn(self.getRespawnPosition())
+
+    def getRespawnPosition(self):
+        highest_y = float('-inf')
+
+        for platform in self.platforms:
+            if platform.body.position.y > highest_y:
+                highest_y = platform.body.position.y
+
+        offset = pixelToWorld(self.screen.get_height() / 2)
+
+        return highest_y + offset
 
     def drawPlatformsInScreen(self):
         for platform in self.platforms:
