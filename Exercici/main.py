@@ -57,7 +57,6 @@ model = MLP().to(device)
 criterion = nn.BCELoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-
 epochs = 25
 model.train()
 loss_all = []
