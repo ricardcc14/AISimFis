@@ -7,6 +7,7 @@ from ContactListener import ContactListener
 from Floor import Floor
 from Ball import Ball
 from Individual import Individual
+from Rectangle import Rectangle
 
 class EvolutionManager:
     def __init__ (self, screen):
@@ -60,22 +61,44 @@ class EvolutionManager:
 
     def crossover5050(self, parent1, parent2):
         child = Individual(self.createWorld())
+        # Primer copia angles
+        angles = []
         for i in range(len(parent1.adn)):
             if np.random.rand() < self.crossover_rate:
-                child.adn[i].angle = parent1.getAngleFromGene(i)
-                child.adn[i].y = parent1.getYPosFromGene(i)
-                child.adn[i].x = parent1.getXPosFromGene(i)
+                angles.append(parent1.getAngleFromGene(i))
             else:
-                child.adn[i].angle = parent2.getAngleFromGene(i)
-                child.adn[i].y = parent2.getYPosFromGene(i)
-                child.adn[i].x = parent2.getXPosFromGene(i)
+                angles.append(parent2.getAngleFromGene(i))
+
+    # Ara reconstruim rectangles connectats segons angles
+        distance_between_centers = 50
+        child.adn = []
+
+        for i in range(len(angles)):
+            if i == 0:
+                x = 100
+                y = 200
+                angle = angles[i]
+                rect = Rectangle(child.world, x, y, angle)
+                child.adn.append(rect)
+            else:
+                prev = child.adn[-1]
+                angle = angles[i]
+
+                dx = np.cos(prev.angle) * distance_between_centers
+                dy = np.sin(prev.angle) * distance_between_centers
+
+                new_x = prev.x + dx
+                new_y = prev.y + dy
+
+                rect = Rectangle(child.world, new_x, new_y, angle)
+                child.adn.append(rect)
         return child
+
     def mutate(self, child):
         for i in range(len(child.adn)):
             if np.random.rand() < self.mutation_rate:
                 child.mutateAngle(i)
-                child.mutateYPos(i)
-                child.mutateXPos(i)
+                
         return child
     
 
@@ -85,7 +108,7 @@ class EvolutionManager:
             return
 
         fitness_values = self.fitness()
-        self.population[0].draw(self.screen)
+        #self.population[0].draw(self.screen)
 
         print(f"Generation {self.generation}")
         print(f"Fitness values: {fitness_values}")
@@ -129,7 +152,9 @@ class EvolutionManager:
     def drawSolution(self):
 
         index = self.optimalResultIndex
+        
         if (index != None):
+            #print(f"Drawing solution for index {index}")
             self.population[index].draw(self.screen)
 
         pygame.display.flip()

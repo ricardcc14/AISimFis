@@ -6,8 +6,8 @@ import json
 def rotate_point(point, angle):
     cos_theta = np.cos(angle)
     sin_theta = np.sin(angle)
-    rotated_x = point.x * cos_theta - point.y * sin_theta
-    rotated_y = point.x * sin_theta + point.y * cos_theta
+    rotated_x = point[0] * cos_theta - point[1] * sin_theta
+    rotated_y = point[0] * sin_theta + point[1] * cos_theta
     return (rotated_x, rotated_y)
 
 

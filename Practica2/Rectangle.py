@@ -23,6 +23,8 @@ class Rectangle:
         bodydf.userData = self
         self.body:b2.b2Body = world.CreateBody(bodydf)
         self.color = "blue"
+        self.line_color = "red"  # Color de la línia divisòria
+        self.circle_color = "green"
 
         boxshape = b2.b2PolygonShape(box=utils.pixelToWorld(self.w/2, self.h/2))
         fd = b2.b2FixtureDef()
@@ -35,29 +37,57 @@ class Rectangle:
 
     def draw(self, screen:pygame.Surface):
         angle = self.body.angle
-        center = utils.worldToPixel(self.body.position.copy())
-        center.y = screen.get_height() - center.y  
+        center_pixel = utils.worldToPixel(self.body.position.copy())
+        hw, hh = self.w / 2, self.h / 2  # Half width and height in pixels
 
-        hw, hh = self.w / 2, self.h / 2
-
-        corners = [
-            b2.b2Vec2(-hw, -hh),
-            b2.b2Vec2(hw, -hh),
-            b2.b2Vec2(hw, hh),
-            b2.b2Vec2(-hw, hh)
+        # Rectangle corners in local coordinates (before rotation)
+        local_corners = [
+            (-hw, -hh),  # Top-left
+            (hw, -hh),   # Top-right
+            (hw, hh),    # Bottom-right
+            (-hw, hh)    # Bottom-left
         ]
 
         points = []
-        
-        for corner in corners:
+        for corner in local_corners:
+            # Rotate each corner point
             rotated_x, rotated_y = utils.rotate_point(corner, angle)
-            rotated = b2.b2Vec2(rotated_x, rotated_y)
-            final = center + rotated
-            points.append((final.x, final.y))
+            
+            # Convert to screen coordinates
+            screen_x = center_pixel.x + rotated_x
+            screen_y = center_pixel.y + rotated_y
+            points.append((screen_x, screen_y))
 
+        # Draw the rectangle
         pygame.draw.polygon(screen, self.color, points)
 
-
+        left_point = b2.b2Vec2(-hw, 0)
+        right_point = b2.b2Vec2(hw, 0)
+        
+        # Rotate points
+        rotated_left = utils.rotate_point(left_point, angle)
+        rotated_right = utils.rotate_point(right_point, angle)
+        
+        # Convert to b2Vec2 if needed
+        if isinstance(rotated_left, tuple):
+            rotated_left = b2.b2Vec2(rotated_left[0], rotated_left[1])
+        if isinstance(rotated_right, tuple):
+            rotated_right = b2.b2Vec2(rotated_right[0], rotated_right[1])
+        
+        # Calculate final positions
+        # line_start = center + rotated_left
+        # line_end = center + rotated_right
+        
+        # # Draw line
+        # pygame.draw.line(screen, self.line_color, 
+        #             (line_start.x, line_start.y), 
+        #             (line_end.x, line_end.y), 2)
+        
+        # # Draw endpoint circles
+        # pygame.draw.circle(screen, self.circle_color,
+        #                 (int(line_start.x), int(line_start.y)), 5)
+        # pygame.draw.circle(screen, self.circle_color,
+        #                 (int(line_end.x), int(line_end.y)), 5)
 
         
         
