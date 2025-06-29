@@ -7,8 +7,10 @@ class Floor:
         self.w = w
         self.h = h
 
+        center_x = x + w / 2
+        center_y = y + h / 2
         bodydf = b2.b2BodyDef()
-        bodydf.position = utils.pixelToWorld(x, y)
+        bodydf.position = utils.pixelToWorld(center_x, center_y)
         bodydf.type = b2.b2_staticBody
         bodydf.userData = self
         self.body = world.CreateBody(bodydf)
@@ -22,6 +24,7 @@ class Floor:
         pass
 
     def draw(self, screen):
-        pos = utils.worldToPixel(self.body.position)
-        pygame.draw.rect(screen, "red", (pos.x-self.w/2, screen.get_height()-pos.y-self.h/2, self.w, self.h))
+        pos = utils.worldToPixel(self.body.position) 
+        pygame.draw.rect(screen, "red", pygame.Rect(pos.x, screen.get_height()-pos.y-self.h/2, self.w, self.h))
+        
         pass

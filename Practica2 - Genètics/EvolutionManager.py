@@ -1,13 +1,10 @@
-
-import utils
 import pygame
 import numpy as np
 import Box2D as b2
 from ContactListener import ContactListener
-from Floor import Floor
-from Ball import Ball
 from Individual import Individual
 from Rectangle import Rectangle
+
 
 class EvolutionManager:
     def __init__ (self, screen):
@@ -38,7 +35,6 @@ class EvolutionManager:
     def resultFound(self):
         return (self.done)
     
-    #Funció que inicialitza un nivell extraient la informació del JSON
     def createPopulationAdn(self):
         population = []
         for i in range(self.population_size):
@@ -69,7 +65,7 @@ class EvolutionManager:
             else:
                 angles.append(parent2.getAngleFromGene(i))
 
-    # Ara reconstruim rectangles connectats segons angles
+        # Ara reconstruim rectangles connectats segons angles
         distance_between_centers = 50
         child.adn = []
 
@@ -101,14 +97,12 @@ class EvolutionManager:
                 
         return child
     
-
-
     def update(self):
         if (self.done == True):
             return
 
         fitness_values = self.fitness()
-        #self.population[0].draw(self.screen)
+       
 
         print(f"Generation {self.generation}")
         print(f"Fitness values: {fitness_values}")
@@ -138,8 +132,6 @@ class EvolutionManager:
                 self.mutate(child)
 
             childrenPopulation.append(child)
-
-        #revisar destroy
         
         self.population.clear()
 
@@ -147,24 +139,19 @@ class EvolutionManager:
         self.population = childrenPopulation
         self.generation += 1
 
-            
-    
     def drawSolution(self):
 
         index = self.optimalResultIndex
         
         if (index != None):
-            #print(f"Drawing solution for index {index}")
             self.population[index].draw(self.screen)
+        for ball in self.population[index].balls:
+            ball.draw(self.screen)
 
         pygame.display.flip()
         pass
 
 
-    def drawInitialScenario(self):
-        self.population[0].draw(self.screen)
-        pygame.display.flip()
-        pass
 
 
 

@@ -1,9 +1,7 @@
 import Box2D as b2
-import pygame
 from Floor import Floor
 from Ball import Ball
-from Rectangle import Rectangle
-import utils
+
 
 class ContactListener(b2.b2ContactListener):
 

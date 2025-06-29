@@ -22,8 +22,7 @@ class Ball:
         self.body.CreateFixture(fd)
         pass
            
-
-    def touchedFloor(self):
+    def touchedFloor(self): 
         self.touched_floor = True
         
     def hasTouchedFloor(self):
@@ -33,11 +32,7 @@ class Ball:
         position:b2.b2Vec2 = utils.worldToPixel(self.body.position.copy())
         position.y = screen.get_height()-position.y
 
-        pygame.draw.circle(screen, 'blue', position, self.radius, 1)
-        pass
-
-    def update(self, world):
-        print("Ball update pos: ", self.body.position)
+        pygame.draw.circle(screen, 'yellow', position, self.radius, 1)
         pass
 
     def destroy(self, world:b2.b2World):

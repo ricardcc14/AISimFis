@@ -1,7 +1,6 @@
 import pygame
 import Box2D as b2
 import utils
-import time
 import numpy as np
 from Ball import Ball
 from Floor import Floor
@@ -28,14 +27,9 @@ class Individual:
         self.floor = Floor(self.world, 0, 0, 640, 100)
 
     def draw(self, screen:pygame.Surface):
-    # First print the total length before the loop
-        #print(f"Total rectangles in ADN: {len(self.adn)}")
         
         for rectangle in self.adn:
             rectangle.draw(screen)
-            # Print individual rectangle info
-            #print(f"Rectangle {self.adn.index(rectangle)}: ({rectangle.x}, {rectangle.y}), angle={rectangle.angle}")
-            pygame.draw.circle(screen, 'red', (rectangle.x, rectangle.y), 5)  # Debugging point
         
         for ball in self.balls:
             ball.draw(screen)
@@ -58,38 +52,34 @@ class Individual:
                 angle = 0  # Angle inicial horitzontal
                 rect = Rectangle(self.world, x, y, angle)
                 initial.append(rect)
-                print(f"Rectangle base creat a ({x}, {y}), angle={angle:.2f}")
             else:
                 # Rectangle anterior
                 previous_rect = initial[i - 1]
                 
-                # Calculem els punts verds del rectangle anterior
-                prev_center = utils.worldToPixel(previous_rect.body.position)
+                prev_center = previous_rect.body.position  # en metres
                 prev_angle = previous_rect.body.angle
-                
-                # Punt verd dret (extrem dret de la línia central)
-                prev_green_right = b2.b2Vec2(
-                    prev_center.x + half_length * np.cos(prev_angle),
-                    prev_center.y + half_length * np.sin(prev_angle)
+                half_length_m = rect_length / 100 / 2
+
+                prev_right = b2.b2Vec2(
+                    prev_center.x + half_length_m * np.cos(prev_angle),
+                    prev_center.y + half_length_m * np.sin(prev_angle)
                 )
-                
-                # Angle del nou rectangle (petita variació)
-                angle_variation = np.random.uniform(-np.pi/6, np.pi/6)  # ±30 graus
+
+                # 2. Nou angle
+                angle_variation = np.random.uniform(-np.pi, np.pi)
                 angle = prev_angle + angle_variation
-                
-                # Calculem la posició del nou rectangle:
-                # El seu punt verd esquerre ha de coincidir amb el punt verd dret anterior
-                # Per tant, el centre estarà a half_length del punt de connexió
-                new_center_x = prev_green_right.x + half_length * np.cos(angle)
-                new_center_y = prev_green_right.y + half_length * np.sin(angle)
-                
-                rect = Rectangle(self.world, new_center_x, new_center_y, angle)
+
+                # 3. Nou centre (en direcció del rectangle anterior!)
+                new_center = b2.b2Vec2(
+                    prev_right.x + half_length_m * np.cos(prev_angle),
+                    prev_right.y + half_length_m * np.sin(prev_angle)
+                )
+
+                # 4. Crear rectangle (en píxels)
+                rect = Rectangle(self.world, new_center.x * 100, new_center.y * 100, angle)
                 initial.append(rect)
                 
-                print(f"Rectangle {i} creat a ({new_center_x:.1f}, {new_center_y:.1f}), "
-                    f"connectat al punt ({prev_green_right.x:.1f}, {prev_green_right.y:.1f}), "
-                    f"connectat al nou punt esquerre ({new_center_x - half_length * np.cos(angle):.1f}, {new_center_y - half_length * np.sin(angle):.1f}), "
-                    f"angle={angle:.2f}")
+                
 
         print(f"ADN complet. Rectangles totals: {len(initial)}")
         return initial
