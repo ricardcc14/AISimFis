@@ -21,6 +21,9 @@ class EvolutionManager:
         self.optimalResultIndex = None
         self.toFinish = False
 
+        self.displayWorld = self.createWorld()
+        self.displayIndividual = Individual(self.displayWorld)
+
         self.sigma = 1.0
         self.mu = np.random.uniform(low=-np.pi, high=np.pi, size=self.genome_length).tolist()
 
@@ -81,6 +84,7 @@ class EvolutionManager:
             if self.toFinish:
                 print("Solution converged. Stopping.")
                 self.done = True
+                self.prepareVisualization()
 
                 best_angles = self.best_individual.x
                 best = Individual(self.createWorld())
@@ -105,22 +109,18 @@ class EvolutionManager:
             self.done = True
             self.optimalResultIndex = 0
 
-    def drawSolution(self):
+
+    def prepareVisualization(self):
+        best_angles = self.best_individual.x
+        self.displayIndividual.buildFromAngles(best_angles)
+
+
+    def renderSolution(self):
     
         index = self.optimalResultIndex
         if index is None:
             return
         
-        best_angles = self.best_individual.x
-
-        world = self.createWorld()
-        individual = Individual(world)
-        individual.buildFromAngles(best_angles)
-
-        for step in range(individual.steps):
-            world.Step(individual.time_step, individual.vel_iters, individual.pos_iters)
-    
-            individual.draw(self.screen)
-            pygame.display.flip()
-            pygame.time.wait(20)
+        self.displayWorld.Step(1/60, 8, 3)
+        self.displayIndividual.draw(self.screen)
 

@@ -15,7 +15,7 @@ frames = 60
 running = True
 font = pygame.freetype.SysFont("Consolas", 24, "white")
 
-algorithm = "genetic"
+algorithm = "cma"
 
 algorithmStarted = False
 resultFound = False
@@ -37,7 +37,7 @@ while running:
         font.render_to(screen, (10, 10), "Running " + algorithm + " algorithm...")
     else:
         font.render_to(screen, (10, 10), "Solution found!")
-        evolutionManager.drawSolution()
+        evolutionManager.renderSolution()
         
     pygame.display.flip()
     clock.tick(frames)
