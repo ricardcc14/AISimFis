@@ -25,6 +25,6 @@ class Floor:
 
     def draw(self, screen):
         pos = utils.worldToPixel(self.body.position) 
-        pygame.draw.rect(screen, "red", pygame.Rect(pos.x, screen.get_height()-pos.y-self.h/2, self.w, self.h))
+        pygame.draw.rect(screen, "red", pygame.Rect(pos.x-self.w/2, screen.get_height()-pos.y-self.h/2, self.w, self.h))
         
         pass

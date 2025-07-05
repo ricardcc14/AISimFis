@@ -39,50 +39,53 @@ class Individual:
         initial = []
         print(f"Creating ADN with {self.nRectangles} rectangles")
         
-        rect_length = 30  # Longitud total del rectangle
-        rect_height = 10  # Alçada del rectangle
-        half_length = rect_length / 2
-        half_height = rect_height / 2
 
         for i in range(self.nRectangles):
             if i == 0:
-                # Primer rectangle
+                
                 x = 100
                 y = 200
-                angle = 0  # Angle inicial horitzontal
-                rect = Rectangle(self.world, x, y, angle)
-                initial.append(rect)
+                rect = Rectangle(self.world, x, y, 0)
+                
             else:
                 # Rectangle anterior
-                previous_rect = initial[i - 1]
+                prev = initial[i - 1]
                 
-                prev_center = previous_rect.body.position  # en metres
-                prev_angle = previous_rect.body.angle
-                half_length_m = rect_length / 100 / 2
-
-                prev_right = b2.b2Vec2(
-                    prev_center.x + half_length_m * np.cos(prev_angle),
-                    prev_center.y + half_length_m * np.sin(prev_angle)
-                )
-
-                # 2. Nou angle
-                angle_variation = np.random.uniform(-np.pi, np.pi)
-                angle = prev_angle + angle_variation
-
-                # 3. Nou centre (en direcció del rectangle anterior!)
-                new_center = b2.b2Vec2(
-                    prev_right.x + half_length_m * np.cos(prev_angle),
-                    prev_right.y + half_length_m * np.sin(prev_angle)
-                )
-
-                # 4. Crear rectangle (en píxels)
-                rect = Rectangle(self.world, new_center.x * 100, new_center.y * 100, angle)
-                initial.append(rect)
+                distance_between_centers = np.sqrt(15**2 + 15**2 - 2 * 15 * 15 * np.cos(180 - prev.angle))
+                dx = np.cos(prev.angle) * distance_between_centers
+                dy = np.sin(prev.angle) * distance_between_centers
+                x = prev.x + dx
+                y = prev.y + dy
+                rect = Rectangle(self.world, x, y, np.random.uniform(-np.pi, np.pi))
+            initial.append(rect)
                 
                 
 
         print(f"ADN complet. Rectangles totals: {len(initial)}")
         return initial
+    def buildFromAngles(self, angles):
+        initial = []
+        print(f"Creating ADN with {self.nRectangles} rectangles")
+        
+
+        for i in range(self.nRectangles):
+            if i == 0:
+                
+                x = 100
+                y = 200
+                rect = Rectangle(self.world, x, y, angles[i])
+                
+            else:
+                # Rectangle anterior
+                prev = initial[i - 1]
+                
+                distance_between_centers = np.sqrt(15**2 + 15**2 - 2 * 15 * 15 * np.cos(180 - prev.angle))
+                dx = np.cos(prev.angle) * distance_between_centers
+                dy = np.sin(prev.angle) * distance_between_centers
+                x = prev.x + dx
+                y = prev.y + dy
+                rect = Rectangle(self.world, x, y, angles[i])
+            initial.append(rect)
     
     def loadBalls(self):
         #Llegir informació del JSON

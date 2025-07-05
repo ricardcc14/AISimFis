@@ -66,28 +66,24 @@ class EvolutionManager:
                 angles.append(parent2.getAngleFromGene(i))
 
         # Ara reconstruim rectangles connectats segons angles
-        distance_between_centers = 50
+        
         child.adn = []
 
         for i in range(len(angles)):
             if i == 0:
                 x = 100
                 y = 200
-                angle = angles[i]
-                rect = Rectangle(child.world, x, y, angle)
-                child.adn.append(rect)
+                rect = Rectangle(child.world, x, y, angles[i])
+                
             else:
                 prev = child.adn[-1]
-                angle = angles[i]
-
+                distance_between_centers = np.sqrt(15**2+15**2 - 2*15*15*np.cos(180 - angles[i]))
                 dx = np.cos(prev.angle) * distance_between_centers
                 dy = np.sin(prev.angle) * distance_between_centers
-
-                new_x = prev.x + dx
-                new_y = prev.y + dy
-
-                rect = Rectangle(child.world, new_x, new_y, angle)
-                child.adn.append(rect)
+                x = prev.x + dx
+                y = prev.y + dy
+                rect = Rectangle(child.world, x, y, angles[i])
+            child.adn.append(rect)
         return child
 
     def mutate(self, child):
@@ -143,13 +139,25 @@ class EvolutionManager:
 
         index = self.optimalResultIndex
         
-        if (index != None):
-            self.population[index].draw(self.screen)
-        for ball in self.population[index].balls:
-            ball.draw(self.screen)
+        best_angles = self.best_individual.x
 
-        pygame.display.flip()
-        pass
+        world = self.createWorld()
+        individual = Individual(world)
+        individual.buildFromAngles(best_angles)
+
+        for step in range(individual.steps):
+            world.Step(individual.time_step, individual.vel_iters, individual.pos_iters)
+    
+            individual.draw(self.screen)
+            pygame.display.flip()
+            pygame.time.wait(20)
+        # if (index != None):
+        #     self.population[index].draw(self.screen)
+        # for ball in self.population[index].balls:
+        #     ball.draw(self.screen)
+
+        # pygame.display.flip()
+        
 
 
 
