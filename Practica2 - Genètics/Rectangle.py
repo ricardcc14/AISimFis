@@ -18,13 +18,12 @@ class Rectangle:
         self.timer = 0
         bodydf = b2.b2BodyDef()
         bodydf.position = utils.pixelToWorld(x, y)
-        bodydf.angle = self.angle 
+        bodydf.angle = self.angle  
         bodydf.type = b2.b2_staticBody
         bodydf.userData = self
         self.body:b2.b2Body = world.CreateBody(bodydf)
         self.color = "blue"
-        self.line_color = "red"  # Color de la línia divisòria
-        self.circle_color = "green"
+      
 
         boxshape = b2.b2PolygonShape(box=utils.pixelToWorld(self.w/2, self.h/2))
         fd = b2.b2FixtureDef()
@@ -35,9 +34,10 @@ class Rectangle:
         self.body.CreateFixture(fd)
         pass
 
+    
     def draw(self, screen: pygame.Surface):
         transform = self.body.transform
-
+        
         hw = self.w / 200  # half width
         hh = self.h / 200  # half height
 
@@ -54,10 +54,6 @@ class Rectangle:
 
         pygame.draw.polygon(screen, self.color, screen_points)
 
-        
-
-        
-        
 
     #def update(self, world):
     def mutateAngle(self):
@@ -73,7 +69,6 @@ class Rectangle:
         if self.body:
             world.DestroyBody(self.body)
             self.body = None 
-        
 
     def setLinearVelocity(self, x:float, y:float, scale:float=5):
         self.body.linearVelocity = scale*utils.pixelToWorld(x, y)

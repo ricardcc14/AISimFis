@@ -36,9 +36,7 @@ class Individual:
         self.floor.draw(screen)
 
     def create_adn(self):
-        initial = []
-        #print(f"Creating ADN with {self.nRectangles} rectangles")
-        
+        initial = []        
 
         for i in range(self.nRectangles):
             if i == 0:

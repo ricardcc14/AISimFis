@@ -55,10 +55,6 @@ class Rectangle:
 
         pygame.draw.polygon(screen, self.color, screen_points)
 
-                
-
-        
-        
 
     #def update(self, world):
     def mutateAngle(self):

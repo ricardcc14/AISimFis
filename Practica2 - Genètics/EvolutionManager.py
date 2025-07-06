@@ -14,12 +14,12 @@ class EvolutionManager:
 
         self.population_size = 100
         self.elite_size = 20
-        self.mutation_rate = 0.1
+        self.mutation_rate = 0.4
         self.crossover_rate = 0.5
         self.population = []
 
         self.generation = 0
-        self.max_generations = 300
+        self.max_generations = 500
 
         self.done = False
         self.optimalResultIndex = None
@@ -59,7 +59,7 @@ class EvolutionManager:
         matching_pool = [self.population[i] for i in best_indices]
         return matching_pool
 
-    def crossover5050(self, parent1, parent2):
+    def crossoverCoinFlip(self, parent1, parent2):
         child = Individual(self.createWorld())
         # Primer copia angles
         angles = []
@@ -128,7 +128,7 @@ class EvolutionManager:
             parent1 = np.random.choice(parents)
             parent2 = np.random.choice(parents)
             
-            child = self.crossover5050(parent1, parent2)
+            child = self.crossoverCoinFlip(parent1, parent2)
 
             if np.random.rand() < self.mutation_rate:
                 self.mutate(child)
@@ -148,13 +148,15 @@ class EvolutionManager:
 
         best_angles = []
 
-        solution = self.population[3]
+        solution = self.population[self.optimalResultIndex]
 
         for rect in solution.adn: 
             best_angles.append(rect.angle)
 
         print(str(best_angles))
             
+        self.displayWorld = self.createWorld()
+        self.displayIndividual = Individual(self.displayWorld)
         self.displayIndividual.buildFromAngles(best_angles)
 
     

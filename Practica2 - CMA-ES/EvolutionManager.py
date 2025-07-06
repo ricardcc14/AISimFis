@@ -15,7 +15,7 @@ class EvolutionManager:
 
         self.population = []
         self.generation = 0
-        self.max_generations = 300
+        self.max_generations = 500
 
         self.done = False
         self.optimalResultIndex = None
