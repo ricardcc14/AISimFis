@@ -124,3 +124,6 @@ class EvolutionManager:
         self.displayWorld.Step(1/60, 8, 3)
         self.displayIndividual.draw(self.screen)
 
+
+        
+

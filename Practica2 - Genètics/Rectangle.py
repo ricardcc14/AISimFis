@@ -36,46 +36,23 @@ class Rectangle:
         pass
 
     def draw(self, screen: pygame.Surface):
-        angle = self.body.angle
-        center_world = self.body.position  # En metres
+        transform = self.body.transform
 
-        # Mides del rectangle en metres
-        hw = self.w / 200  # half-width in meters (30px / 2 / 100)
-        hh = self.h / 200  # half-height in meters
+        hw = self.w / 200  # half width
+        hh = self.h / 200  # half height
 
-        # Corners en coordenades locals (en metres)
-        local_corners = [
-            (-hw, -hh),
-            ( hw, -hh),
-            ( hw,  hh),
-            (-hw,  hh)
+        # Vèrtexs locals
+        local_corners = [(-hw, -hh), (hw, -hh), (hw, hh), (-hw, hh)]
+
+        # Transforma a món i converteix a píxels invertint Y
+        pixel_corners = [
+            utils.worldToPixel(transform * b2.b2Vec2(x, y))
+            for (x, y) in local_corners
         ]
 
-        # Rotar i transformar a coordenades globals
-        world_corners = []
-        for lx, ly in local_corners:
-            rx = lx * np.cos(angle) - ly * np.sin(angle)
-            ry = lx * np.sin(angle) + ly * np.cos(angle)
-            wx = center_world.x + rx
-            wy = center_world.y + ry
-            world_corners.append(b2.b2Vec2(wx, wy))
+        screen_points = [(p.x, 400 - p.y) for p in pixel_corners]
 
-        # Convertir a píxels per dibuixar amb pygame
-        pixel_corners = [utils.worldToPixel(corner) for corner in world_corners]
-        pygame.draw.polygon(screen, self.color, [(p.x, p.y) for p in pixel_corners])
-
-        # Dibuixa els punts verds als extrems
-        left_world = b2.b2Vec2(
-            center_world.x + (-hw) * np.cos(angle),
-            center_world.y + (-hw) * np.sin(angle)
-        )
-        right_world = b2.b2Vec2(
-            center_world.x + (hw) * np.cos(angle),
-            center_world.y + (hw) * np.sin(angle)
-        )
-
-        pygame.draw.circle(screen, "green", utils.worldToPixel(left_world), 3)
-        pygame.draw.circle(screen, "green", utils.worldToPixel(right_world), 3)
+        pygame.draw.polygon(screen, self.color, screen_points)
 
         
 

@@ -38,7 +38,7 @@ while running:
 
     else:
         font.render_to(screen, (10, 10), "Solution found!")
-        evolutionManager.drawSolution()
+        evolutionManager.renderSolution()
 
     pygame.display.flip()
     clock.tick(frames)

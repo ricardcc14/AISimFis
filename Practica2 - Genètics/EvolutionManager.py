@@ -23,8 +23,12 @@ class EvolutionManager:
 
         self.done = False
         self.optimalResultIndex = None
+        self.best_angles = []
 
         self.population = self.createPopulationAdn()
+
+        self.displayWorld = self.createWorld()
+        self.displayIndividual = Individual(self.displayWorld)
 
     def createWorld(self):
         world = b2.b2World()
@@ -99,19 +103,21 @@ class EvolutionManager:
 
         fitness_values = self.fitness()
        
-
         print(f"Generation {self.generation}")
         print(f"Fitness values: {fitness_values}")
 
         if 0 in fitness_values:
             self.done = True
             self.optimalResultIndex = fitness_values.index(0)
-            print("Fitness 0 found! Stopping evolution.")
+            print("Optimal individual: ", self.optimalResultIndex)
+            #print("Fitness 0 found! Stopping evolution.")
+            self.prepareVisualization()
             
-            
+
         if self.generation == self.max_generations:
-            print("Max generations reached")
+            #print("Max generations reached")
             self.done = True
+            self.prepareVisualization()
 
             self.optimalResultIndex = fitness_values.index(min(fitness_values))
 
@@ -131,32 +137,39 @@ class EvolutionManager:
         
         self.population.clear()
 
-        print("Skipping to Next Generation")
+        #print("Skipping to Next Generation")
         self.population = childrenPopulation
         self.generation += 1
 
-    def drawSolution(self):
 
-        index = self.optimalResultIndex
-        
-        best_angles = self.best_individual.x
+    def prepareVisualization(self):
 
-        world = self.createWorld()
-        individual = Individual(world)
-        individual.buildFromAngles(best_angles)
+        print("Optimal individual: ", self.optimalResultIndex)
 
-        for step in range(individual.steps):
-            world.Step(individual.time_step, individual.vel_iters, individual.pos_iters)
+        best_angles = []
+
+        solution = self.population[3]
+
+        for rect in solution.adn: 
+            best_angles.append(rect.angle)
+
+        print(str(best_angles))
+            
+        self.displayIndividual.buildFromAngles(best_angles)
+
     
-            individual.draw(self.screen)
-            pygame.display.flip()
-            pygame.time.wait(20)
-        # if (index != None):
-        #     self.population[index].draw(self.screen)
-        # for ball in self.population[index].balls:
-        #     ball.draw(self.screen)
+    def renderSolution(self):
+    
+        index = self.optimalResultIndex
+        if index is None:
+            return
+        
+        self.displayWorld.Step(1/60, 8, 3)
+        self.displayIndividual.draw(self.screen)
 
-        # pygame.display.flip()
+
+
+
         
 
 

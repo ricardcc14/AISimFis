@@ -37,7 +37,7 @@ class Individual:
 
     def create_adn(self):
         initial = []
-        print(f"Creating ADN with {self.nRectangles} rectangles")
+        #print(f"Creating ADN with {self.nRectangles} rectangles")
         
 
         for i in range(self.nRectangles):
@@ -61,13 +61,13 @@ class Individual:
                 
                 
 
-        print(f"ADN complet. Rectangles totals: {len(initial)}")
+        #print(f"ADN complet. Rectangles totals: {len(initial)}")
         return initial
+    
     def buildFromAngles(self, angles):
         initial = []
-        print(f"Creating ADN with {self.nRectangles} rectangles")
+        #print(f"Creating ADN with {self.nRectangles} rectangles")
         
-
         for i in range(self.nRectangles):
             if i == 0:
                 
